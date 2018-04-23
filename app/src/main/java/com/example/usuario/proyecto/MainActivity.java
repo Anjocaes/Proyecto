@@ -10,15 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
-    DBAdapter db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        CrearYAbrirBaseDeDatos();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        db.insertDato("asd","dsa",0,0);
 
         // alambramos el TextView
         TextView MiTextView = (TextView) findViewById(R.id.singup);
@@ -50,10 +49,9 @@ public class MainActivity extends AppCompatActivity {
                 String data1 = use.getText().toString();
                 EditText use2 = (EditText) findViewById(R.id.pass);
                 String data2 = use2.getText().toString();
-                String user = db.ObtenerRegistro(data1);
-                String pass = db.ObtenerRegistro2(data2);
+                List<User> bb =User.find(User.class, "user = ? and pass = ?", data1, data2);
 
-                if(!user.equals(" ") && !pass.equals(" ")){
+                if(!bb.isEmpty()){
                     Intent intento = new Intent(getApplicationContext(), Main2Activity.class);
                     startActivity(intento);
                 }else{
@@ -78,10 +76,4 @@ public class MainActivity extends AppCompatActivity {
         alert11.show();
         ;};
 
-    public void CrearYAbrirBaseDeDatos() {
-        if (db == null){
-            db = new DBAdapter(this);
-            db.open();
-        }
-    }
 }
